@@ -39,7 +39,9 @@ class VideoApi(Resource):
 
 class VideoListApi(Resource):
     def get(self):
-        return {'hello': 'world'}
+        session = create_session()
+        items = session.query(Video).order_by(Video.updated_at.desc()).limit(10)
+        return [item.json() for item in items]
 
     def post(self):
         args = parser.parse_args()

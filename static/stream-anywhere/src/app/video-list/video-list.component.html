@@ -1,0 +1,5 @@
+<mat-list>
+ <mat-list-item *ngFor="let item of items">
+     <a routerLink="/videos/{{ item['id'] }}">{{ item['url'] }}</a>
+ </mat-list-item>
+</mat-list>

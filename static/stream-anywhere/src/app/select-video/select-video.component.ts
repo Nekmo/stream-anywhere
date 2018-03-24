@@ -26,7 +26,11 @@ export class SelectVideoComponent implements OnInit {
     }
 
     addVideo() {
-        this.http.post('/api/videos', this.selectVideoForm.value).subscribe(data => {
+        this.goToVideo(this.selectVideoForm.value);
+    }
+
+    goToVideo(id) {
+        this.http.post('/api/videos', id).subscribe(data => {
             this.router.navigate(['/videos', data['id']])
         });
     }
