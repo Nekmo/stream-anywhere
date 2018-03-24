@@ -11,6 +11,9 @@ import { AppComponent } from './app.component';
 import { VideoComponent } from './video/video.component';
 import {MatButtonModule, MatFormFieldModule, MatInputModule, MatOptionModule, MatSelectModule} from "@angular/material";
 import { SelectVideoComponent } from './select-video/select-video.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { HttpClientModule } from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
 
 
 @NgModule({
@@ -27,12 +30,16 @@ import { SelectVideoComponent } from './select-video/select-video.component';
         VgOverlayPlayModule,
         VgBufferingModule,
         BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientModule,
 
         MatButtonModule,
         MatFormFieldModule,
         MatInputModule,
         MatOptionModule,
         MatSelectModule,
+        AppRoutingModule,
     ],
     providers: [],
     bootstrap: [AppComponent]
