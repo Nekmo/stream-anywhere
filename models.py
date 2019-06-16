@@ -1,5 +1,5 @@
 import os
-from sqlalchemy import create_engine, Integer, Column, String, DateTime, func, Sequence
+from sqlalchemy import create_engine, Integer, Column, String, DateTime, func, Sequence, Boolean, Float
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import JSONType
@@ -17,7 +17,9 @@ class Video(Base):
 
     id = Column(Integer, Sequence('video_id_seq'), primary_key=True)
     url = Column(String(4500), index=True)
-    position = Column(Integer, default=0)
+    position = Column(Float, default=0)
+    duration = Column(Float, default=0)
+    finished = Column(Boolean, default=False)
     options = Column(JSONType)
     started_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
