@@ -37,3 +37,6 @@ flower
 # Documentation
 # ------------------------------------------------------------------------------
 Sphinx
+
+python-magic
+-e git+git@github.com:Nekmo/django-code-generator.git@master#egg=django-code-generator

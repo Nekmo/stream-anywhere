@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     "crispy_forms",
     "rest_framework",
 
+    "django_code_generator",
+
     # Project apps
+    "videos",
     "stream_anywhere.apps.StreamAnywhereAppConfig",
     # ... add here more apps
 ]
@@ -189,3 +192,5 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+ROOT_PATH = '/'
