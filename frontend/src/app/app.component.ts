@@ -18,8 +18,10 @@ export class AppComponent {
 
   videoSources: Plyr.Source[] = [
     {
-      src: 'bTqVqk7FSmY',
-      provider: 'youtube',
+      src: 'http://127.0.0.1:8000/',
+      type: 'video/mp4',
+      // src: 'bTqVqk7FSmY',
+      // provider: 'youtube',
     },
   ];
 
