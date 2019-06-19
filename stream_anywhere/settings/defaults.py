@@ -193,4 +193,4 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-ROOT_PATH = '/'
+ROOT_PATH = os.environ.get('ROOT_PATH', '/')

@@ -17,12 +17,14 @@ export class AppComponent {
   player: Plyr;
 
   videoSources: Plyr.Source[] = [
-    {
-      src: 'http://127.0.0.1:8000/',
-      type: 'video/mp4',
-      // src: 'bTqVqk7FSmY',
-      // provider: 'youtube',
-    },
+    // {
+    //   src: 'http://127.0.0.1:8000/',
+    //   type: 'video/mp4',
+    // },
+    // {
+    //   src: 'bTqVqk7FSmY',
+    //   provider: 'youtube',
+    // }
   ];
 
   played(event: Plyr.PlyrEvent) {
@@ -31,6 +33,18 @@ export class AppComponent {
 
   play(): void {
     this.player.play(); // or this.plyr.player.play()
+  }
+
+  playFile(path) {
+    this.videoSources = [
+      {
+        src: `http://127.0.0.1:8000${path.path}`,
+        type: 'video/mp4',
+      },
+    ];
+    setTimeout(() => {
+      this.play();
+    });
   }
 
 }

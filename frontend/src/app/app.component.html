@@ -4,6 +4,6 @@
 
 <button (click)="play()">Play</button>
 
-<select-file></select-file>
+<select-file (selectedFile)="playFile($event)"></select-file>
 
 <router-outlet></router-outlet>
