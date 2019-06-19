@@ -31,15 +31,20 @@ class VideoSerializer(serializers.ModelSerializer):
 class PathSerializer(serializers.Serializer):
     name = serializers.CharField()
     url = serializers.SerializerMethodField()
+    path = serializers.SerializerMethodField()
     type = serializers.SerializerMethodField()
     mimetype = serializers.SerializerMethodField()
 
     def get_url(self, obj: Path):
-        path = str(obj.absolute()).replace(settings.ROOT_PATH, '', 1)
+        path = self.get_path(obj)
         url = reverse('path-detail', kwargs=dict(pk=path))
-        if obj.is_dir():
-            url += '/'
         return self.context['request'].build_absolute_uri(url)
+
+    def get_path(self, obj: Path):
+        path = str(obj.absolute()).replace(settings.ROOT_PATH, '', 1)
+        if obj.is_dir():
+            path += '/'
+        return path
 
     def get_type(self, obj: Path):
         if obj.is_dir():

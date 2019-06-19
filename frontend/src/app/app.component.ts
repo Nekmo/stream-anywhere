@@ -10,7 +10,7 @@ import Plyr from 'plyr';
 export class AppComponent {
   title = 'frontend';
 
-  @ViewChild(PlyrComponent)
+  @ViewChild(PlyrComponent, { static: true })
   plyr: PlyrComponent;
 
   // or get it from plyrInit event
