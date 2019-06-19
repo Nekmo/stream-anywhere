@@ -34,6 +34,9 @@ class Collection(LocationBase):
     description = models.TextField(blank=True)
     options = JSONField(blank=True, null=True)
 
+    class Meta:
+        ordering = ['-updated_at']
+
 
 class Video(LocationBase):
     checksum = models.CharField(max_length=64, blank=True)
@@ -43,3 +46,6 @@ class Video(LocationBase):
     started_at = models.DateTimeField(blank=True, null=True)
     finished_at = models.DateTimeField(blank=True, null=True)
     played_at = models.DateTimeField(blank=True, null=True)
+
+    class Meta:
+        ordering = ['-played_at']

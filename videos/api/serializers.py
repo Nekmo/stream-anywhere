@@ -33,6 +33,15 @@ class VideoSerializer(serializers.ModelSerializer):
             'name': os.path.splitext(os.path.basename(validated_data['path']))[0]
         }
         instance, self.created = Video.objects.get_or_create(**validated_data, defaults=defaults)
+        folder = os.path.dirname(validated_data['path'])
+        if folder and self.created:
+            defaults = {
+                'name': os.path.basename(folder),
+            }
+            collection, _ = Collection.objects.get_or_create(path=folder, user=validated_data['user'],
+                                                             defaults=defaults)
+            instance.collection = collection
+            instance.save()
         return instance
 
     class Meta:
