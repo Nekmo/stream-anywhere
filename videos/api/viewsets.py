@@ -1,8 +1,12 @@
 import os
 from pathlib import Path
+from typing import Union
 
 from django.conf import settings
-from rest_framework import viewsets
+from django.contrib.auth import get_user_model
+from django.contrib.auth.models import AbstractUser
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from videos.models import Collection, Video
@@ -41,6 +45,21 @@ class VideoViewSet(viewsets.ModelViewSet):
         'id', 'name', 'path', 'status', 'created_at', 'updated_at', 'checksum', 'position', 'duration',
         'collection', 'started_at', 'finished_at', 'played_at',
     )
+
+    def perform_create(self, serializer):
+        user: Union[AbstractUser, None] = self.request.user
+        user = user if user.is_authenticated else None
+        user = user or get_user_model().objects.get(username='default')
+        serializer.save(user=user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data,
+                        status=status.HTTP_201_CREATED if serializer.created else status.HTTP_200_OK,
+                        headers=headers)
 
 
 class PathViewSet(viewsets.GenericViewSet):

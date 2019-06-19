@@ -1,8 +1,9 @@
+import os
 from pathlib import Path
 
 import magic
 from django.conf import settings
-from rest_framework import serializers
+from rest_framework import serializers, validators
 from rest_framework.reverse import reverse
 from videos.models import Collection, Video
 
@@ -18,6 +19,22 @@ class CollectionSerializer(serializers.ModelSerializer):
 
 
 class VideoSerializer(serializers.ModelSerializer):
+    created = None
+    name = serializers.CharField(required=False)
+
+    def run_validators(self, value):
+        for validator in self.validators:
+            if isinstance(validator, validators.UniqueTogetherValidator):
+                self.validators.remove(validator)
+        super().run_validators(value)
+
+    def create(self, validated_data):
+        defaults = {
+            'name': os.path.splitext(os.path.basename(validated_data['path']))[0]
+        }
+        instance, self.created = Video.objects.get_or_create(**validated_data, defaults=defaults)
+        return instance
+
     class Meta:
         model = Video
         depth = 1
@@ -25,7 +42,7 @@ class VideoSerializer(serializers.ModelSerializer):
             'id', 'name', 'path', 'status', 'created_at', 'updated_at', 'checksum', 'position', 'duration',
             'collection', 'started_at', 'finished_at', 'played_at',
         )
-        read_only_fields = ()
+        read_only_fields = ('checksum', 'duration')
 
 
 class PathSerializer(serializers.Serializer):
