@@ -40,9 +40,21 @@ export class AppComponent implements OnInit {
     // }
   ];
 
+  currentVideo: Video = null;
+
   constructor(private http: HttpClient) { }
 
   ngOnInit(): void {
+    this.updatePosition();
+  }
+
+  updatePosition() {
+    if(this.currentVideo && this.player && this.player.currentTime > 0) {
+      this.http.patch(`/api/videos/${this.currentVideo.id}/`, {
+        position: Math.floor(this.player.currentTime),
+      }).subscribe();
+    }
+    setTimeout(() => {this.updatePosition()}, 3000);
   }
 
   played(event: Plyr.PlyrEvent) {
@@ -61,15 +73,17 @@ export class AppComponent implements OnInit {
       },
     ];
     setTimeout(() => {
+      this.player.currentTime = video.position;
       this.play();
-    });
+    }, 300);
   }
 
   playFilePath(path) {
-    this.http.post('/api/videos/', {
+    this.http.post<Video>('/api/videos/', {
       path: path.path,
     }).subscribe((data) => {
-      this.playVideo(data)
+      this.playVideo(data);
+      this.currentVideo = <Video>data;
     });
   }
 

@@ -30,9 +30,9 @@ export class SelectFileComponent implements OnInit {
   }
 
   listPaths() {
-    this.http.get(`/api/paths/${this.directory}`).subscribe(data => {
-      this.directories = <Path[]>data.filter((x) => x.type == 'directory');
-      this.files = <Path[]>data.filter((x) => x.type != 'directory');
+    this.http.get<Path[]>(`/api/paths/${this.directory}`).subscribe(data => {
+      this.directories = data.filter((x) => x.type == 'directory');
+      this.files = data.filter((x) => x.type != 'directory');
     });
   }
 
