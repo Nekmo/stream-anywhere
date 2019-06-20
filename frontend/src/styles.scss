@@ -4,3 +4,27 @@
 
 body {
 }
+
+
+#title {
+  position:absolute;
+  top:0;
+  left:0;
+  color:#fff;
+  padding:20px;
+}
+#button {
+position:absolute;
+top:0;
+right:0;
+color:#fff;
+padding:20px;
+}
+.plyr--hide-controls #title {
+    opacity: 0;
+    pointer-events: none;
+}
+.plyr--hide-controls #button {
+    opacity: 0;
+    pointer-events: none;
+}

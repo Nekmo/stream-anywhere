@@ -44,6 +44,11 @@ class VideoSerializer(serializers.ModelSerializer):
             instance.save()
         return instance
 
+    def update(self, instance: Video, validated_data):
+        if 'position' in validated_data:
+            instance.update_position(validated_data['position'])
+        return super().update(instance, validated_data)
+
     class Meta:
         model = Video
         depth = 1

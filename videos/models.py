@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils import timezone
 from django.utils.translation import gettext as _
 
 # Create your models here.
@@ -46,6 +47,9 @@ class Video(LocationBase):
     started_at = models.DateTimeField(blank=True, null=True)
     finished_at = models.DateTimeField(blank=True, null=True)
     played_at = models.DateTimeField(blank=True, null=True)
+
+    def update_position(self, position):
+        self.played_at = timezone.now()
 
     class Meta:
         ordering = ['-played_at']
