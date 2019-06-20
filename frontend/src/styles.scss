@@ -20,11 +20,23 @@ right:0;
 color:#fff;
 padding:20px;
 }
-.plyr--hide-controls #title {
-    opacity: 0;
-    pointer-events: none;
-}
-.plyr--hide-controls #button {
-    opacity: 0;
-    pointer-events: none;
+//.plyr--hide-controls #title {
+//    opacity: 0;
+//    pointer-events: none;
+//}
+//.plyr--hide-controls #button {
+//    opacity: 0;
+//    pointer-events: none;
+//}
+
+#video {
+  .plyr_controls__top {
+      top: 0;
+      bottom: auto;
+      background: linear-gradient(rgba(0,0,0,.7),rgba(0,0,0,0));
+  }
+
+  .plyr--video.plyr--hide-controls .plyr_controls__top {
+      transform: translateY(-100%);
+  }
 }

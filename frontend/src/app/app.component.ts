@@ -15,6 +15,24 @@ type Video = {
 };
 
 
+type VideoPagination = {
+  count: number,
+  next: string|null,
+  previous: string|null,
+  results: Video[],
+}
+
+const htmlControls = `
+<div class="plyr__controls plyr_controls__top">
+    <div id='title'>
+    	This is some text
+    </div>
+    <div id='button'>
+    <button type='button' class='btn btn-secondary'>This is a button</button>
+    </div>    
+</div>
+`;
+
 
 @Component({
   selector: 'app-root',
@@ -49,7 +67,17 @@ export class AppComponent implements OnInit {
     this.updatePosition();
     setTimeout(() => {
       this.playLastVideo();
+      this.addControls(document.getElementById('video'));
     }, 500);
+  }
+
+  addControls(element) {
+    let plyrVideo = element.getElementsByClassName('plyr--video')[0];
+    let controls = new DOMParser().parseFromString(htmlControls, 'text/html');
+    let children = Array.from(controls.body.children);
+    for (let i = 0; i < children.length; i++) {
+      plyrVideo.appendChild(children[i]);
+    }
   }
 
   updatePosition() {
