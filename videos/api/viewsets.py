@@ -61,6 +61,15 @@ class VideoViewSet(viewsets.ModelViewSet):
                         status=status.HTTP_201_CREATED if serializer.created else status.HTTP_200_OK,
                         headers=headers)
 
+    @action(detail=False)
+    def first(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        instance = queryset.first()
+        serializer = self.get_serializer(instance)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED,
+                        headers=headers)
+
 
 class PathViewSet(viewsets.GenericViewSet):
     serializer_class = PathSerializer

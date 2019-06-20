@@ -15,6 +15,7 @@ type Video = {
 };
 
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -46,6 +47,9 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.updatePosition();
+    setTimeout(() => {
+      this.playLastVideo();
+    }, 500);
   }
 
   updatePosition() {
@@ -84,6 +88,12 @@ export class AppComponent implements OnInit {
     }).subscribe((data) => {
       this.playVideo(data);
       this.currentVideo = <Video>data;
+    });
+  }
+
+  playLastVideo() {
+    this.http.get<Video>('/api/videos/first/').subscribe((video) => {
+      this.playVideo(video);
     });
   }
 
