@@ -2,6 +2,8 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {PlyrComponent} from "ngx-plyr";
 import Plyr from 'plyr';
 import {HttpClient} from "@angular/common/http";
+import {SelectFileComponent} from "./select-file/select-file/select-file.component";
+import {MatDialog} from "@angular/material";
 
 type Video = {
   id: number,
@@ -27,11 +29,26 @@ const htmlControls = `
     <div id='title'>
     	This is some text
     </div>
-    <div id='button'>
-    <button type='button' class='btn btn-secondary'>This is a button</button>
-    </div>    
 </div>
 `;
+
+const htmlControlsButtons = `
+<button class="plyr__controls__item plyr__control" type="button" data-plyr="foo">
+<i class="material-icons">
+folder
+</i>
+<span class="plyr__sr-only">PIP</span>
+</button>
+`;
+
+
+function addControls(html, addFunction) {
+  let controls = new DOMParser().parseFromString(html, 'text/html');
+  let children = Array.from(controls.body.children);
+  for (let i = 0; i < children.length; i++) {
+    addFunction(children[i]);
+  }
+}
 
 
 @Component({
@@ -59,25 +76,48 @@ export class AppComponent implements OnInit {
     // }
   ];
 
+  options: any;
+
   currentVideo: Video = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient,
+              public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.updatePosition();
     setTimeout(() => {
       this.playLastVideo();
-      this.addControls(document.getElementById('video'));
-    }, 500);
+      let plyrVideo = this.getPlyrVideoElement();
+      addControls(htmlControls,(control) => {
+        plyrVideo.appendChild(control);
+      });
+      setTimeout(() => {
+        let menu = plyrVideo.querySelector('.plyr__menu');
+        addControls(htmlControlsButtons, (button) => {
+          button.addEventListener('click', () => {
+            this.filesDialog();
+          });
+          menu.parentNode.insertBefore(button, menu);
+        })
+      }, 500);
+    }, 700);
+    // this.options = {
+    //   controls: [
+    //     'play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings',
+    //     (new DOMParser().parseFromString(htmlControlsButtons, 'text/html').body.firstChild),
+    //     'pip', 'airplay', 'fullscreen']
+    // }
   }
 
-  addControls(element) {
-    let plyrVideo = element.getElementsByClassName('plyr--video')[0];
-    let controls = new DOMParser().parseFromString(htmlControls, 'text/html');
-    let children = Array.from(controls.body.children);
-    for (let i = 0; i < children.length; i++) {
-      plyrVideo.appendChild(children[i]);
-    }
+  filesDialog() {
+    let dialogRef = this.dialog.open(SelectFileComponent, {
+      height: '400px',
+      width: '600px',
+    });
+  }
+
+  getPlyrVideoElement() {
+    return document.getElementById('video').getElementsByClassName('plyr--video')[0]
   }
 
   updatePosition() {
@@ -106,6 +146,7 @@ export class AppComponent implements OnInit {
     ];
     setTimeout(() => {
       this.player.currentTime = video.position;
+      this.currentVideo = <Video>video;
       this.play();
     }, 300);
   }
@@ -115,7 +156,6 @@ export class AppComponent implements OnInit {
       path: path.path,
     }).subscribe((data) => {
       this.playVideo(data);
-      this.currentVideo = <Video>data;
     });
   }
 

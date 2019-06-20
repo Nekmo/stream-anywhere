@@ -14,6 +14,9 @@ import {MatIconModule, MatListModule} from "@angular/material";
   ],
   exports: [
     SelectFileComponent,
+  ],
+  entryComponents: [
+    SelectFileComponent,
   ]
 })
 export class SelectFileModule { }

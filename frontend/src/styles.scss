@@ -39,4 +39,11 @@ padding:20px;
   .plyr--video.plyr--hide-controls .plyr_controls__top {
       transform: translateY(-100%);
   }
+
+  i.material-icons {
+    font-size: 20px;
+    width: 18px;
+    height: 18px;
+    display: block;
+  }
 }
