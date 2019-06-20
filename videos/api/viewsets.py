@@ -80,7 +80,10 @@ class PathViewSet(viewsets.GenericViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.is_dir():
-            serializer = self.get_serializer(self.filter_queryset(instance.iterdir()), many=True)
+            queryset = self.filter_queryset(instance.iterdir())
+            page = self.paginate_queryset(list(queryset))
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
         else:
             serializer = self.get_serializer(instance)
         return Response(serializer.data)

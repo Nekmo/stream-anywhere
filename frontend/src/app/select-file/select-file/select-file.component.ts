@@ -10,6 +10,14 @@ type Path = {
 };
 
 
+type PathPagination = {
+  count: number,
+  next: string|null,
+  previous: string|null,
+  results: Path[],
+}
+
+
 @Component({
   selector: 'select-file',
   templateUrl: './select-file.component.html',
@@ -30,9 +38,10 @@ export class SelectFileComponent implements OnInit {
   }
 
   listPaths() {
-    this.http.get<Path[]>(`/api/paths/${this.directory}`).subscribe(data => {
-      this.directories = data.filter((x) => x.type == 'directory');
-      this.files = data.filter((x) => x.type != 'directory');
+    this.http.get<PathPagination>(`/api/paths/${this.directory}`).subscribe(data => {
+      let results = data.results;
+      this.directories = results.filter((x) => x.type == 'directory');
+      this.files = results.filter((x) => x.type != 'directory');
     });
   }
 
