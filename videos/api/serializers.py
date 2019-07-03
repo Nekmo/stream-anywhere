@@ -63,8 +63,8 @@ class PathSerializer(serializers.Serializer):
     name = serializers.CharField()
     url = serializers.SerializerMethodField()
     path = serializers.SerializerMethodField()
-    type = serializers.SerializerMethodField()
-    mimetype = serializers.SerializerMethodField()
+    type = serializers.CharField()
+    mimetype = serializers.CharField()
 
     def get_url(self, obj: Path):
         path = self.get_path(obj)
@@ -77,31 +77,11 @@ class PathSerializer(serializers.Serializer):
             path += '/'
         return path
 
-    def get_type(self, obj: Path):
-        if obj.is_dir():
-            return 'directory'
-        elif obj.is_file():
-            return 'file'
-        elif obj.is_socket():
-            return 'socket'
-        elif obj.is_symlink():
-            return 'symlink'
-        elif obj.is_block_device():
-            return 'block_device'
-        elif obj.is_reserved():
-            return 'reserved'
-        elif obj.is_char_device():
-            return 'char_device'
-        elif obj.is_fifo():
-            return 'fifo'
-        else:
-            return 'unknown'
-
-    def get_mimetype(self, obj: Path):
-        if obj.is_dir():
-            return 'inode/directory'
-        elif obj.is_file():
-            return magic.from_file(str(obj.absolute()), mime=True)
+    # def get_mimetype(self, obj: Path):
+    #     if obj.is_dir():
+    #         return 'inode/directory'
+    #     elif obj.is_file():
+    #         return magic.from_file(str(obj.absolute()), mime=True)
 
 #
 #

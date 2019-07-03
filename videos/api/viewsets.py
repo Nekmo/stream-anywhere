@@ -1,5 +1,4 @@
 import os
-from pathlib import Path
 from typing import Union
 
 from django.conf import settings
@@ -11,6 +10,7 @@ from rest_framework.response import Response
 
 from videos.models import Collection, Video
 from videos.api.serializers import CollectionSerializer, VideoSerializer, PathSerializer
+from videos.path import Path
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -84,7 +84,7 @@ class PathViewSet(viewsets.GenericViewSet):
         return self.get_object().iterdir()
 
     def filter_queryset(self, queryset):
-        return filter(lambda x: not x.name.startswith('.'), queryset)
+        return sorted(filter(lambda x: not x.is_hidden and x.mime == 'video', queryset), key=lambda x: x.name)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
