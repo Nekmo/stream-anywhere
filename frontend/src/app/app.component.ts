@@ -140,7 +140,7 @@ export class AppComponent implements OnInit {
   playVideo(video: Video) {
     this.videoSources = [
       {
-        src: `http://127.0.0.1:8000${video.path}`,
+        src: `http://${window.location.hostname}:8000${video.path}`,
         type: 'video/mp4',
       },
     ];
