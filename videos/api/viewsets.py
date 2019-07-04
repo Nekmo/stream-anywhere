@@ -4,6 +4,7 @@ from typing import Union
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
+from django.http import Http404
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -11,6 +12,16 @@ from rest_framework.response import Response
 from videos.models import Collection, Video
 from videos.api.serializers import CollectionSerializer, VideoSerializer, PathSerializer
 from videos.path import Path
+
+
+def get_path(path):
+    path = path.lstrip('/')
+    return Path(os.path.join(settings.ROOT_PATH, path))
+
+
+class VideoFilter:
+    def __call__(self,  queryset):
+        return sorted(filter(lambda x: not x.is_hidden and x.mime == 'video', queryset), key=lambda x: x.name)
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -27,6 +38,24 @@ class CollectionViewSet(viewsets.ModelViewSet):
     ordering_fields = (
         'id', 'name', 'path', 'status', 'created_at', 'updated_at', 'recursive',
     )
+
+    @action(detail=True)
+    def next(self, *args, **kwargs):
+        obj: Collection = self.get_object()
+        current_video = obj.last_video_played()
+        path = get_path(obj.path)
+        video = None
+        videos = VideoFilter()(path.iterdir())
+        index = None
+        if current_video:
+            index, _ = next(filter(lambda x: x[1].name == os.path.basename(current_video.path), enumerate(videos)),
+                            (None, None))
+        if index is not None and index + 1 < len(videos):
+            video = videos[index + 1]
+        if video is None:
+            raise Http404
+        serializer = PathSerializer(instance=video, context=self.get_serializer_context())
+        return Response(serializer.data)
 
 
 class VideoViewSet(viewsets.ModelViewSet):
@@ -77,14 +106,13 @@ class PathViewSet(viewsets.GenericViewSet):
 
     def get_object(self):
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
-        path = os.path.join(settings.ROOT_PATH, self.kwargs.get(lookup_url_kwarg, ''))
-        return Path(path)
+        return get_path(self.kwargs.get(lookup_url_kwarg, ''))
 
     def get_queryset(self):
         return self.get_object().iterdir()
 
     def filter_queryset(self, queryset):
-        return sorted(filter(lambda x: not x.is_hidden and x.mime == 'video', queryset), key=lambda x: x.name)
+        return VideoFilter()(queryset)
 
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()

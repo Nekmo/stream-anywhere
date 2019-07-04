@@ -13,7 +13,7 @@ class CollectionSerializer(serializers.ModelSerializer):
         model = Collection
         depth = 1
         fields = (
-            'id', 'name', 'path', 'status', 'created_at', 'updated_at', 'recursive',
+            'id', 'url', 'name', 'path', 'status', 'created_at', 'updated_at', 'recursive',
         )
         read_only_fields = ()
 

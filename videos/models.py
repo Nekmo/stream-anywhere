@@ -35,6 +35,9 @@ class Collection(LocationBase):
     description = models.TextField(blank=True)
     options = JSONField(blank=True, null=True)
 
+    def last_video_played(self):
+        return self.videos.first()
+
     class Meta:
         ordering = ['-updated_at']
 
@@ -43,7 +46,8 @@ class Video(LocationBase):
     checksum = models.CharField(max_length=64, blank=True)
     position = models.PositiveIntegerField(default=0)
     duration = models.PositiveIntegerField(default=0)
-    collection = models.ForeignKey(Collection, null=True, blank=True, on_delete=models.SET_NULL)
+    collection = models.ForeignKey(Collection, null=True, blank=True, on_delete=models.SET_NULL,
+                                   related_name='videos')
     started_at = models.DateTimeField(blank=True, null=True)
     finished_at = models.DateTimeField(blank=True, null=True)
     played_at = models.DateTimeField(blank=True, null=True)
