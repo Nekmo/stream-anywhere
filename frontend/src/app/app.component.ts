@@ -5,6 +5,10 @@ import {HttpClient} from "@angular/common/http";
 import {SelectFileComponent} from "./select-file/select-file/select-file.component";
 import {MatDialog} from "@angular/material";
 
+type Collection = {
+  id: number,
+}
+
 type Video = {
   id: number,
   url: string,
@@ -14,6 +18,7 @@ type Video = {
   status: string,
   position: number,
   duration: number,
+  collection: Collection,
 };
 
 
@@ -135,6 +140,12 @@ export class AppComponent implements OnInit {
 
   play(): void {
     this.player.play(); // or this.plyr.player.play()
+  }
+
+  ended(): void {
+    this.http.get(`/api/collections/${this.currentVideo.collection.id}/next/`).subscribe((path) => {
+      this.playFilePath(path);
+    });
   }
 
   playVideo(video: Video) {
