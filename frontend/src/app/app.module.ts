@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import {AppComponent, TopControlsComponent} from './app.component';
 import {PlyrModule} from "ngx-plyr";
 import {SelectFileModule} from "./select-file/select-file.module";
-import {MatDialogModule} from "@angular/material";
+import {MatDialogModule, MatTabsModule} from "@angular/material";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 @NgModule({

@@ -47,3 +47,7 @@ padding:20px;
     display: block;
   }
 }
+
+.dialog-no-padding .mat-dialog-container {
+  padding: 0;
+}

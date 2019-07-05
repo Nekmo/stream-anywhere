@@ -12,6 +12,7 @@ import Plyr from 'plyr';
 import {HttpClient} from "@angular/common/http";
 import {SelectFileComponent} from "./select-file/select-file/select-file.component";
 import {MatDialog} from "@angular/material";
+import {SelectFileDialogComponent} from "./select-file/select-file-dialog/select-file-dialog.component";
 
 type Collection = {
   id: number,
@@ -142,10 +143,17 @@ export class AppComponent implements OnInit {
   }
 
   filesDialog() {
-    let dialogRef = this.dialog.open(SelectFileComponent, {
+    let dialogRef = this.dialog.open(SelectFileDialogComponent, {
       height: '400px',
       width: '600px',
+      panelClass: 'dialog-no-padding',
     });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+      this.playFilePath(result)
+      // this.animal = result;
+    });
+
   }
 
   getPlyrVideoElement() {
