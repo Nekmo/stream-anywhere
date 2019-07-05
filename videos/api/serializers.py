@@ -67,7 +67,7 @@ class PathSerializer(serializers.Serializer):
     mimetype = serializers.CharField()
 
     def get_url(self, obj: Path):
-        path = self.get_path(obj)
+        path = self.get_path(obj).lstrip('/')
         url = reverse('path-detail', kwargs=dict(pk=path))
         return self.context['request'].build_absolute_uri(url)
 
