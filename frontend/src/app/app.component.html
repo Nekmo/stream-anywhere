@@ -1,13 +1,10 @@
 <!--The content below is only a placeholder and can be replaced.-->
-
-<div plyr style="width: 640px;" plyrTitle="Video 1" [plyrSources]="videoSources" id="video" [plyrOptions]="options"
-     (plyrInit)="player = $event"
-     (plyrEnded)="ended($event)"
-     (plyrPlay)="played($event)">
+<div id="video-container">
+  <div plyr style="width: 640px;" plyrTitle="Video 1" [plyrSources]="videoSources" id="video" [plyrOptions]="options"
+       (plyrInit)="player = $event"
+       (plyrEnded)="ended($event)"
+       (plyrPlay)="played($event)">
+  </div>
 </div>
-
-<button (click)="play()">Play</button>
-
-<select-file (selectedFile)="playFilePath($event)"></select-file>
 
 <router-outlet></router-outlet>

@@ -2,7 +2,7 @@ import {
   ApplicationRef,
   Component,
   ComponentFactoryResolver,
-  EmbeddedViewRef,
+  EmbeddedViewRef, HostListener,
   Injector, Input,
   OnInit,
   ViewChild
@@ -206,6 +206,7 @@ export class AppComponent implements OnInit {
       this.player.currentTime = video.position;
       this.currentVideo = <Video>video;
       this.play();
+
       // Title
       this.componentRef.instance.title = video.name;
     }, 300);
@@ -247,5 +248,30 @@ export class AppComponent implements OnInit {
     //     componentRef.destroy();
     // }, 3000);
   }
+
+  // updateVideoSize() {
+  //   if(this.player && this.player.ratio) {
+  //     let height = window.innerHeight;
+  //     let width = window.innerWidth;
+  //     let ratio = this.player.ratio.split(':');
+  //     ratio = parseInt(ratio[0]) / parseInt(ratio[1]);
+  //     width = height * ratio;
+  //     document.querySelector<HTMLElement>('#video video').style.width = `${width}px`;
+  //   }
+  // }
+
+  @HostListener('window:resize')
+  onWindowResize() {
+      //debounce resize, wait for resize to finish before doing stuff
+    // this.updateVideoSize();
+
+      // if (this.resizeTimeout) {
+      //     clearTimeout(this.resizeTimeout);
+      // }
+      // this.resizeTimeout = setTimeout((() => {
+      //     console.log('Resize complete');
+      // }).bind(this), 500);
+  }
+
 
 }

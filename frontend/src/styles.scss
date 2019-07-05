@@ -3,6 +3,8 @@
 
 
 body {
+  margin: 0;
+  padding: 0;
 }
 
 
@@ -50,4 +52,34 @@ padding:20px;
 
 .dialog-no-padding .mat-dialog-container {
   padding: 0;
+}
+
+
+div[plyr] {
+  // width: 100vw !important;
+  // height: 100vh !important;
+  height: 100% !important;
+}
+
+
+#video-container {
+  width: 100vw;
+  height: 100vh;
+
+  #video {
+    width: 100% !important;
+  }
+
+  .plyr {
+    height: 100vh;
+  }
+
+  .plyr__video-wrapper--fixed-ratio {
+    padding-bottom: 0;
+    height: 100%;
+  }
+
+  video {
+    // width: 1619px !important;
+  }
 }
