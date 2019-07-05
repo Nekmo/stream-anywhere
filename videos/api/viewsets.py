@@ -21,7 +21,8 @@ def get_path(path):
 
 class VideoFilter:
     def __call__(self,  queryset):
-        return sorted(filter(lambda x: not x.is_hidden and x.mime == 'video', queryset), key=lambda x: x.name)
+        return sorted(filter(lambda x: not x.is_hidden and (x.mime == 'video' or x.type == 'directory'),
+                             queryset), key=lambda x: x.name)
 
 
 class CollectionViewSet(viewsets.ModelViewSet):

@@ -153,7 +153,6 @@ export class AppComponent implements OnInit {
       this.playFilePath(result)
       // this.animal = result;
     });
-
   }
 
   getPlyrVideoElement() {
