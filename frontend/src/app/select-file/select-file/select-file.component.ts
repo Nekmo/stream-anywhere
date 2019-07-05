@@ -47,6 +47,8 @@ export class SelectFileComponent implements OnInit {
       let results = data.results;
       this._directories = results.filter((x) => x.type == 'directory');
       this._files = results.filter((x) => x.type != 'directory');
+      this.directoriesHidden = true;
+      this.filesHidden = true;
       this.toggleDirectories();
       this.toggleFiles();
     });

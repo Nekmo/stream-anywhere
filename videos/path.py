@@ -6,6 +6,8 @@ import magic
 class Path(type(pathlib.Path())):
     _mimetype = None
     _type = None
+    _updated_name = None
+    _sort_key = None
 
     def get_mimetype(self):
         if self.is_dir():
@@ -47,8 +49,24 @@ class Path(type(pathlib.Path())):
 
     @property
     def is_hidden(self):
-        return self.name.startswith('.')
+        return self.updated_name.startswith('.')
 
     @property
     def mime(self):
         return (self.mimetype or '').split('/')[0]
+
+    @property
+    def updated_name(self):
+        return self._updated_name or self.name
+
+    @updated_name.setter
+    def updated_name(self, value):
+        self._updated_name = value
+
+    @property
+    def sort_key(self):
+        return self._sort_key or self.name
+
+    @sort_key.setter
+    def sort_key(self, value):
+        self._sort_key = value

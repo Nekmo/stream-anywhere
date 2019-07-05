@@ -1,4 +1,5 @@
 import os
+from itertools import chain
 from typing import Union
 
 from django.conf import settings
@@ -22,7 +23,7 @@ def get_path(path):
 class VideoFilter:
     def __call__(self,  queryset):
         return sorted(filter(lambda x: not x.is_hidden and (x.mime == 'video' or x.type == 'directory'),
-                             queryset), key=lambda x: x.name)
+                             queryset), key=lambda x: x.sort_key)
 
 
 class CollectionViewSet(viewsets.ModelViewSet):
@@ -109,8 +110,15 @@ class PathViewSet(viewsets.GenericViewSet):
         lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
         return get_path(self.kwargs.get(lookup_url_kwarg, ''))
 
-    def get_queryset(self):
-        return self.get_object().iterdir()
+    def get_queryset(self, obj=None):
+        obj = obj or self.get_object()
+        extra = []
+        if str(obj.parent).startswith(settings.ROOT_PATH):
+            parent = obj.parent
+            parent.updated_name = 'Parent'
+            parent.sort_key = '\x00'  # Put at start always
+            extra = [parent]
+        return chain(iter(extra), obj.iterdir())
 
     def filter_queryset(self, queryset):
         return VideoFilter()(queryset)
@@ -118,11 +126,10 @@ class PathViewSet(viewsets.GenericViewSet):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.is_dir():
-            queryset = self.filter_queryset(instance.iterdir())
+            queryset = self.filter_queryset(self.get_queryset(instance))
             page = self.paginate_queryset(list(queryset))
             serializer = self.get_serializer(page, many=True)
             return self.get_paginated_response(serializer.data)
         else:
             serializer = self.get_serializer(instance)
         return Response(serializer.data)
-

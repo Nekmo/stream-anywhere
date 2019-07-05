@@ -60,7 +60,7 @@ class VideoSerializer(serializers.ModelSerializer):
 
 
 class PathSerializer(serializers.Serializer):
-    name = serializers.CharField()
+    name = serializers.CharField(source='updated_name')
     url = serializers.SerializerMethodField()
     path = serializers.SerializerMethodField()
     type = serializers.CharField()
