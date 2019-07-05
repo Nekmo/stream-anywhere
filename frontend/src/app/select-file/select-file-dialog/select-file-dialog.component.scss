@@ -33,6 +33,24 @@ mat-tab-group {
           flex: 1 1 auto;
       }
 
+      .mat-tab-label {
+        justify-content: left;
+        text-align: left;
+
+        mat-icon {
+          margin-right: 15px;
+        }
+      }
+
+      .mat-tab-label.cdk-focused {
+        color: #3F51B5;
+      }
+
+      .mat-tab-label.mat-tab-label-active {
+        color: #3F51B5;
+        opacity: .75;
+      }
+
     }
 
     ///deep/ {}
