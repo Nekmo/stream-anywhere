@@ -1,4 +1,12 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {
+  ApplicationRef,
+  Component,
+  ComponentFactoryResolver,
+  EmbeddedViewRef,
+  Injector, Input,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {PlyrComponent} from "ngx-plyr";
 import Plyr from 'plyr';
 import {HttpClient} from "@angular/common/http";
@@ -29,14 +37,6 @@ type VideoPagination = {
   results: Video[],
 }
 
-const htmlControls = `
-<div class="plyr__controls plyr_controls__top">
-    <div id='title'>
-    	This is some text
-    </div>
-</div>
-`;
-
 const htmlControlsButtons = `
 <button class="plyr__controls__item plyr__control" type="button" data-plyr="foo">
 <i class="material-icons">
@@ -47,11 +47,40 @@ folder
 `;
 
 
+function getTopHtmlControls(title) {
+  return `
+  <div class="plyr__controls plyr_controls__top">
+      <div id='title'>
+      	${title}
+      </div>
+  </div>
+  `
+}
+
+
 function addControls(html, addFunction) {
   let controls = new DOMParser().parseFromString(html, 'text/html');
   let children = Array.from(controls.body.children);
   for (let i = 0; i < children.length; i++) {
     addFunction(children[i]);
+  }
+}
+
+
+@Component({
+  selector: 'top-controls',
+  template: `
+    <div class="plyr__controls plyr_controls__top">
+      <div id='title'>
+      	{{ title }}
+      </div>
+  </div>  
+  `,
+})
+export class TopControlsComponent implements OnInit {
+  @Input() title: string = 'Foo bar spam';
+
+  ngOnInit(): void {
   }
 }
 
@@ -84,18 +113,26 @@ export class AppComponent implements OnInit {
   options: any;
 
   currentVideo: Video = null;
+  componentRef: any;
 
   constructor(private http: HttpClient,
-              public dialog: MatDialog) { }
+              public dialog: MatDialog,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private appRef: ApplicationRef,
+              private injector: Injector,
+              ) { }
 
   ngOnInit(): void {
     this.updatePosition();
     setTimeout(() => {
       this.playLastVideo();
       let plyrVideo = this.getPlyrVideoElement();
-      addControls(htmlControls,(control) => {
-        plyrVideo.appendChild(control);
-      });
+
+      // addControls(getTopHtmlControls(''),(control) => {
+      //   plyrVideo.appendChild(control);
+      // });
+      this.appendComponentToBody(TopControlsComponent, plyrVideo);
+
       setTimeout(() => {
         let menu = plyrVideo.querySelector('.plyr__menu');
         addControls(htmlControlsButtons, (button) => {
@@ -106,6 +143,7 @@ export class AppComponent implements OnInit {
         })
       }, 500);
     }, 700);
+
     // this.options = {
     //   controls: [
     //     'play-large', 'play', 'progress', 'current-time', 'mute', 'volume', 'captions', 'settings',
@@ -159,6 +197,8 @@ export class AppComponent implements OnInit {
       this.player.currentTime = video.position;
       this.currentVideo = <Video>video;
       this.play();
+      // Title
+      this.componentRef.instance.title = video.name;
     }, 300);
   }
 
@@ -174,6 +214,29 @@ export class AppComponent implements OnInit {
     this.http.get<Video>('/api/videos/first/').subscribe((video) => {
       this.playVideo(video);
     });
+  }
+
+  appendComponentToBody(component: any, domRoot: Element) {
+    // 1. Create a component reference from the component
+    this.componentRef = this.componentFactoryResolver
+      .resolveComponentFactory(component)
+      .create(this.injector);
+
+    // 2. Attach component to the appRef so that it's inside the ng component tree
+    this.appRef.attachView(this.componentRef.hostView);
+
+    // 3. Get DOM element from component
+    const domElem = (this.componentRef.hostView as EmbeddedViewRef<any>)
+      .rootNodes[0] as HTMLElement;
+
+    // 4. Append DOM element to the body
+    domRoot.appendChild(domElem);
+
+    // 5. Wait some time and remove it from the component tree and from the DOM
+    // setTimeout(() => {
+    //     this.appRef.detachView(componentRef.hostView);
+    //     componentRef.destroy();
+    // }, 3000);
   }
 
 }
