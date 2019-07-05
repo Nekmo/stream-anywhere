@@ -47,17 +47,6 @@ folder
 `;
 
 
-function getTopHtmlControls(title) {
-  return `
-  <div class="plyr__controls plyr_controls__top">
-      <div id='title'>
-      	${title}
-      </div>
-  </div>
-  `
-}
-
-
 function addControls(html, addFunction) {
   let controls = new DOMParser().parseFromString(html, 'text/html');
   let children = Array.from(controls.body.children);
@@ -78,7 +67,7 @@ function addControls(html, addFunction) {
   `,
 })
 export class TopControlsComponent implements OnInit {
-  @Input() title: string = 'Foo bar spam';
+  @Input() title: string = '';
 
   ngOnInit(): void {
   }
@@ -133,15 +122,15 @@ export class AppComponent implements OnInit {
       // });
       this.appendComponentToBody(TopControlsComponent, plyrVideo);
 
-      setTimeout(() => {
-        let menu = plyrVideo.querySelector('.plyr__menu');
-        addControls(htmlControlsButtons, (button) => {
-          button.addEventListener('click', () => {
-            this.filesDialog();
-          });
-          menu.parentNode.insertBefore(button, menu);
-        })
-      }, 500);
+      // setTimeout(() => {
+      //   let menu = plyrVideo.querySelector('.plyr__menu');
+      //   addControls(htmlControlsButtons, (button) => {
+      //     button.addEventListener('click', () => {
+      //       this.filesDialog();
+      //     });
+      //     menu.parentNode.insertBefore(button, menu);
+      //   })
+      // }, 500);
     }, 700);
 
     // this.options = {
@@ -193,6 +182,19 @@ export class AppComponent implements OnInit {
         type: 'video/mp4',
       },
     ];
+
+    let plyrVideo = this.getPlyrVideoElement();
+    setTimeout(() => {
+      let menu = plyrVideo.querySelector('.plyr__menu');
+      addControls(htmlControlsButtons, (button) => {
+        button.addEventListener('click', () => {
+          this.filesDialog();
+        });
+        menu.parentNode.insertBefore(button, menu);
+      })
+    }, 500);
+
+
     setTimeout(() => {
       this.player.currentTime = video.position;
       this.currentVideo = <Video>video;
