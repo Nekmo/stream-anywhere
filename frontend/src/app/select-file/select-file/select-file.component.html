@@ -1,13 +1,21 @@
 
 <mat-list>
-  <h3 mat-subheader>Folders</h3>
+  <h3 mat-subheader (click)="toggleDirectories()">Folders
+    <span fxFlex></span>
+    <mat-icon *ngIf="directoriesHidden">keyboard_arrow_up</mat-icon>
+    <mat-icon *ngIf="!directoriesHidden">keyboard_arrow_down</mat-icon>
+  </h3>
   <mat-list-item *ngFor="let path of directories" (click)="selectDir(path)">
     <mat-icon mat-list-icon>folder</mat-icon>
     <h4 mat-line>{{ path.name }}</h4>
     <p mat-line></p>
   </mat-list-item>
   <mat-divider></mat-divider>
-  <h3 mat-subheader>Files</h3>
+  <h3 mat-subheader (click)="toggleFiles()">Files
+    <span fxFlex></span>
+    <mat-icon *ngIf="filesHidden">keyboard_arrow_up</mat-icon>
+    <mat-icon *ngIf="!filesHidden">keyboard_arrow_down</mat-icon>
+  </h3>
   <mat-list-item *ngFor="let path of files" (click)="selectFile(path)">
     <mat-icon mat-list-icon>insert_drive_file</mat-icon>
     <h4 mat-line>{{ path.name }}</h4>
