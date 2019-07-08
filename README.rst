@@ -2,8 +2,7 @@
 Stream Anywhere
 ###############
 
-.. image:: https://img.shields.io/travis/Nekmo/stream-anywhere
-.svg?style=flat-square&maxAge=2592000
+.. image:: https://img.shields.io/travis/Nekmo/stream-anywhere.svg?style=flat-square&maxAge=2592000
   :target: https://travis-ci.org/Nekmo/stream-anywhere
   :alt: Latest Travis CI build status
 
@@ -30,32 +29,15 @@ Stream Anywhere
 
 Play a video on your pc and continue on your smartphone
 
-Development commands
-====================
+.. image:: images/player.png
 
-Type checks
------------
-
-Running type checks with mypy::
-
-  $ mypy stream_anywhere
+.. image:: images/list-files.png
 
 
-Test coverage
--------------
+Features
+========
 
-To run the tests, check your test coverage, and generate an HTML coverage report::
-
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
-
-
-Celery
-------
-
-This app comes with Celery. To run a celery worker:
-
-.. code-block:: bash
-
-    celery -A stream_anywhere worker -l info
+* Automatically saves the current time in the videos playback to continue later.
+* Select videos from your file system and organize them by collections.
+* Open the Stream-anywhere url on another device to continue playing.
+* Play the next video after finishing the current one.
