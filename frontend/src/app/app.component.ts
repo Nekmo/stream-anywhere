@@ -13,6 +13,7 @@ import {HttpClient} from "@angular/common/http";
 import {SelectFileComponent} from "./select-file/select-file/select-file.component";
 import {MatDialog} from "@angular/material";
 import {SelectFileDialogComponent} from "./select-file/select-file-dialog/select-file-dialog.component";
+import {first} from "rxjs/operators";
 
 type Collection = {
   id: number,
@@ -173,13 +174,28 @@ export class AppComponent implements OnInit {
   }
 
   play(): void {
-    this.player.play(); // or this.plyr.player.play()
+    var promise = this.player.media.play();
+
+    if (promise !== undefined) {
+        promise.then(_ => {
+            // Autoplay started!
+        }).catch(error => {
+            // Autoplay was prevented.
+            // Show a "Play" button so that user can start playback.
+          setTimeout(() => this.play(), 100);
+        });
+    }
   }
 
   ended(): void {
     this.http.get(`/api/collections/${this.currentVideo.collection.id}/next/`).subscribe((path) => {
       this.playFilePath(path);
     });
+  }
+
+  playAfterSeeking() {
+    if(this.plyr.plyrSeeking)
+    setTimeout(() => this.playAfterSeeking());
   }
 
   playVideo(video: Video) {
@@ -205,7 +221,15 @@ export class AppComponent implements OnInit {
     setTimeout(() => {
       this.player.currentTime = video.position;
       this.currentVideo = <Video>video;
-      this.play();
+
+      this.plyr.plyrSeeked.pipe(first()).subscribe(() => {
+        setTimeout(() => {
+          this.play();
+        }, 300);
+      });
+      // setTimeout(() => {
+      //   this.play();
+      // }, 1000);
 
       // Title
       this.componentRef.instance.title = video.name;
