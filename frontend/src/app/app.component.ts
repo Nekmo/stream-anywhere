@@ -160,7 +160,7 @@ export class AppComponent implements OnInit {
   }
 
   updatePosition() {
-    if(this.currentVideo && this.player && this.player.currentTime > 0) {
+    if(this.currentVideo && this.player && this.player.currentTime > 0 && this.player.playing) {
       this.http.patch(`/api/videos/${this.currentVideo.id}/`, {
         position: Math.floor(this.player.currentTime),
       }).subscribe();
