@@ -10,9 +10,9 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from videos.models import Collection, Video
-from videos.api.serializers import CollectionSerializer, VideoSerializer, PathSerializer
-from videos.path import Path
+from stream_anywhere.videos.models import Collection, Video
+from stream_anywhere.videos.api.serializers import CollectionSerializer, VideoSerializer, PathSerializer
+from stream_anywhere.videos.path import Path
 
 
 def get_path(path):

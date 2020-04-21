@@ -5,7 +5,7 @@ import magic
 from django.conf import settings
 from rest_framework import serializers, validators
 from rest_framework.reverse import reverse
-from videos.models import Collection, Video
+from stream_anywhere.videos.models import Collection, Video
 
 
 class CollectionSerializer(serializers.ModelSerializer):

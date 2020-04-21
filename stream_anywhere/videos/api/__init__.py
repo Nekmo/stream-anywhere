@@ -1,7 +1,7 @@
 from django.conf.urls import url, include
 from rest_framework import routers
 
-from videos.api.viewsets import CollectionViewSet, VideoViewSet, PathViewSet
+from stream_anywhere.videos.api.viewsets import CollectionViewSet, VideoViewSet, PathViewSet
 
 router = routers.DefaultRouter()
 

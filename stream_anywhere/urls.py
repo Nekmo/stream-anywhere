@@ -7,6 +7,6 @@ from django.contrib import admin
 urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     path("admin/", admin.site.urls),
-    path("api/", include('videos.api')),
+    path("api/", include('stream_anywhere.videos.api')),
     # Your stuff: custom urls includes go here
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

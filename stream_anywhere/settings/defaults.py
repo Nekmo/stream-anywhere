@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     "django_code_generator",
 
     # Project apps
-    "videos",
+    "stream_anywhere.videos",
     "stream_anywhere.apps.StreamAnywhereAppConfig",
     # ... add here more apps
 ]
