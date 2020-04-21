@@ -1,7 +1,7 @@
-import multiprocessing
-
+import os
 from gunicorn.app.base import BaseApplication
 
+from stream_anywhere.nginx import ServeNginx
 from stream_anywhere.wsgi import application
 
 
@@ -27,4 +27,6 @@ def run_server():
         'bind': '%s:%s' % ('127.0.0.1', '8080'),
         'workers': 4,
     }
+
+    ServeNginx(f'/run/user/{os.getuid()}/stream_anywhere_nginx.pid').run()
     StandaloneApplication(application, options).run()
