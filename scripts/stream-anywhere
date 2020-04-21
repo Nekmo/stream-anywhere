@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+from stream_anywhere.cli import run_server
+
+
+if __name__ == '__main__':
+    run_server()
